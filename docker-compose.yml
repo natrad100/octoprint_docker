@@ -7,8 +7,8 @@ services:
       context: ./
       dockerfile: ./Dockerfile
     restart: unless-stopped
-    ports:
-      - 4000:80
+    expose:
+      - 4000
     devices:
     # use `python -m serial.tools.miniterm` to see what the name is of the printer
      - /dev/ttyUSB0:/dev/ttyACM0
@@ -18,7 +18,12 @@ services:
     # uncomment the lines below to ensure camera streaming is enabled when
     # you add a video device
     environment:
-     - ENABLE_MJPG_STREAMER=true
+      - ENABLE_MJPG_STREAMER=true
+      - VIRTUAL_HOST=ender.splashdev.com.au
+      - VIRUTAL_PORT=4000
+      - LETSENCRYPT_HOST=ender.splashdev.com.au
+      - LETSENCRYPT_EMAIL=natrad09@bigpond.net.au
+
   
   #config-editor:
   #  image: linuxserver/code-server
@@ -36,3 +41,8 @@ services:
 
 volumes:
   octoprint:
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
